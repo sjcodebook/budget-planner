@@ -63,6 +63,20 @@ var budgetController = (function() {
       return newItem;
     },
 
+    deleteItem: function(type, id) {
+      var ids, index;
+
+      ids = data.allItems[type].map(function(current) {
+        return current.id;
+      });
+
+      index = ids.indexOf(id);
+
+      if (index !== -1) {
+        data.allItems[type].splice(index, 1);
+      }
+    },
+
     calculateBudget: function() {
       // ─── CALCULATE TOTAL INCOME AND EXPENSES ─────────────────────────
       calculateTotal('exp');
@@ -149,6 +163,11 @@ var UIController = (function() {
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
 
+    deleteListItem: function(selectorID) {
+      var el = document.getElementById(selectorID);
+      el.parentNode.removeChild(el);
+    },
+
     clearFields: function() {
       var fields, fieldsArr;
 
@@ -200,6 +219,10 @@ var controller = (function(budgetCtrl, UICtrl) {
         ctrlAddItem();
       }
     });
+
+    document
+      .querySelector(DOM.container)
+      .addEventListener('click', ctrlDeleteItem);
   };
 
   var updateBudget = function() {
@@ -233,6 +256,27 @@ var controller = (function(budgetCtrl, UICtrl) {
       updateBudget();
     } else {
       console.log('dshsj');
+    }
+  };
+
+  var ctrlDeleteItem = function(event) {
+    var itemID, splitID, type, ID;
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+    if (itemID) {
+      splitID = itemID.split('-');
+      type = splitID[0];
+      ID = parseInt(splitID[1]);
+
+      // ─── 1. DELETE THE ITEM FROM THE DATA STRUCTURE ─────────────────────────────────
+      budgetCtrl.deleteItem(type, ID);
+      // ─── 2. DELETE THE ITEM FROM THE UI ─────────────────────────────────────────────
+      UICtrl.deleteListItem(itemID);
+
+      // ─── 3. UPDATE AND SHOW THE NEW BUDGET ──────────────────────────────────────────
+      updateBudget();
+
+      // ─── 4. CALCULATE AND UPDATE PERCENTAGES ────────────────────────────────────────
     }
   };
 
