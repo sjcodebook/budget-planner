@@ -12,6 +12,12 @@
       rel="stylesheet"
       type="text/css"
     />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
+      integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E"
+      crossorigin="anonymous"
+    />
     <link type="text/css" rel="stylesheet" href="style.css" />
     <title>Budgety</title>
   </head>
@@ -45,6 +51,9 @@
     <div class="bottom">
       <div class="add">
         <div class="add__container">
+          <div class="alert alert-dark disappear" id="alert">
+            <i class="fas fa-info-circle" id="alert_text"> alert </i>
+          </div>
           <select class="add__type">
             <option value="inc" selected>+</option>
             <option value="exp">-</option>

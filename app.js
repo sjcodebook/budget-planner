@@ -236,8 +236,19 @@ var controller = (function(budgetCtrl, UICtrl) {
     UICtrl.displayBudget(budget);
   };
 
+  var updatePercentages = function() {
+    // ─── 1. CALCULATE PERCENTAGES ────────────────────────────────────
+    // ─── 2. READ PERCENTAGES FROM THE BUDGET CONTROLLER ──────────────
+    // ─── 3. UPDATE THE UI WITH THE NEW PERCENTAGES ───────────────────
+  };
+
   var ctrlAddItem = function() {
     var input, newItem;
+    var alertText = document.getElementById('alert_text');
+    var alert = document.getElementById('alert');
+    var timeOut = setTimeout(function() {
+      alert.classList.add('disappear');
+    }, 2000);
 
     // ─── 1. GET THE FEILD INPUT DATA ─────────────────────────────────
     input = UICtrl.getInput();
@@ -254,8 +265,21 @@ var controller = (function(budgetCtrl, UICtrl) {
 
       // ─── 5. CALCULATE AND UPDATE THE BUDGET ──────────────────────────
       updateBudget();
-    } else {
-      console.log('dshsj');
+
+      // ─── 6. CALCULATE AND UPDATE PERCENTAGES ─────────────────────────
+      updatePercentages();
+    } else if (input.description === '') {
+      alert.classList.remove('disappear');
+      alertText.innerText = ' Description cannot be left blank';
+    } else if (isNaN(input.value)) {
+      alert.classList.remove('disappear');
+      alertText.innerText = ' Entered value is not a number';
+      timeOut();
+    } else if (input.value <= 0) {
+      alert.classList.remove('disappear');
+      alertText.innerText =
+        ' Entered value cannot be less than or equal to zero';
+      timeOut();
     }
   };
 
@@ -270,6 +294,7 @@ var controller = (function(budgetCtrl, UICtrl) {
 
       // ─── 1. DELETE THE ITEM FROM THE DATA STRUCTURE ─────────────────────────────────
       budgetCtrl.deleteItem(type, ID);
+
       // ─── 2. DELETE THE ITEM FROM THE UI ─────────────────────────────────────────────
       UICtrl.deleteListItem(itemID);
 
@@ -277,6 +302,7 @@ var controller = (function(budgetCtrl, UICtrl) {
       updateBudget();
 
       // ─── 4. CALCULATE AND UPDATE PERCENTAGES ────────────────────────────────────────
+      updatePercentages();
     }
   };
 
